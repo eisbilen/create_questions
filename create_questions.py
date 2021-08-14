@@ -2,28 +2,35 @@ import json
 import spacy
 from spacy.matcher import Matcher
 
+import question_rules as qr
 import sqlite3
 
 nlp = spacy.load('en_core_web_sm')
-matcher_prepositions_sub_conj = Matcher(nlp.vocab)
-prepositions_sub_conj_rule_1 = [[{'TAG': 'IN'}]]
-matcher_prepositions_sub_conj.add('PREPOSITION', prepositions_sub_conj_rule_1)
 
 print(nlp)
 print('success')
 
-def write_linguistic_features(matches_single, my_doc):
-    lf_dict = {}
-    lf_list = []
-    for match_id, start, end in matches_single:
+class QuestionFilter:
+    def __init__(self, tag, my_doc) -> None:
+        self.tag = tag
+        self.my_doc = my_doc
+        self.__rule = qr.rules[tag]
+        self.__matcher = Matcher(nlp.vocab)
+        self.__matcher.add(tag, self.__rule)
+        self.__matches = self.__matcher(self.my_doc)
+
+    def write_linguistic_features(self):
         lf_dict = {}
-        # Get the string representation
-        string_id = nlp.vocab.strings[match_id]
-        span = my_doc[start:end]  # The matched span
-        lf_dict[string_id] = span.text
-        lf_list.append(lf_dict)
-        print(match_id, string_id, start, end, span.text)
-    return lf_list
+        lf_list = []
+        for match_id, start, end in self.__matches:
+            lf_dict = {}
+            # Get the string representation
+            string_id = nlp.vocab.strings[match_id]
+            span = self.my_doc[start:end]  # The matched span
+            lf_dict[string_id] = span.text
+            lf_list.append(lf_dict)
+            # print(match_id, string_id, start, end, span.text)
+        return lf_list
 
 def get_all():
     try:
@@ -39,11 +46,19 @@ def get_all():
 
         for row in records:
             sentence = dict(row)['sentence']
-
             my_doc = nlp(sentence)
-            matches_prepositions_sub_conj = matcher_prepositions_sub_conj(my_doc)
-            preposition = write_linguistic_features(matches_prepositions_sub_conj, my_doc)
-            print(preposition)
+            
+            lf = QuestionFilter('PREPOSITIONS', my_doc)
+            lf1 = QuestionFilter('VERB1', my_doc)
+            lf2 = QuestionFilter('VERB2', my_doc)
+            lf3 = QuestionFilter('VERB3', my_doc)
+
+            print(lf.write_linguistic_features())
+            print(lf1.write_linguistic_features())
+            print(lf2.write_linguistic_features())
+            print(lf3.write_linguistic_features())
+
+
         cursor.close()
 
     except sqlite3.Error as error:
