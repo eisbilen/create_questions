@@ -18,7 +18,7 @@ class QuestionFilter:
         self.__matcher = Matcher(nlp.vocab)
         self.__matcher.add(tag, self.__rule)
         self.__matches = self.__matcher(self.my_doc)
-
+        
     def write_linguistic_features(self):
         lf_dict = {}
         lf_list = []
@@ -47,17 +47,17 @@ def get_all():
         for row in records:
             sentence = dict(row)['sentence']
             my_doc = nlp(sentence)
+            print(my_doc)
             
-            lf = QuestionFilter('PREPOSITIONS', my_doc)
-            lf1 = QuestionFilter('VERB1', my_doc)
-            lf2 = QuestionFilter('VERB2', my_doc)
-            lf3 = QuestionFilter('VERB3', my_doc)
+            lf = QuestionFilter('PREPOSITIONS', my_doc).write_linguistic_features()
+            lf1 = QuestionFilter('VERB1', my_doc).write_linguistic_features()
+            lf2 = QuestionFilter('VERB2', my_doc).write_linguistic_features()
+            lf3 = QuestionFilter('VERB3', my_doc).write_linguistic_features()
 
-            print(lf.write_linguistic_features())
-            print(lf1.write_linguistic_features())
-            print(lf2.write_linguistic_features())
-            print(lf3.write_linguistic_features())
-
+            print(lf)
+            print(lf1)
+            print(lf2)
+            print(lf3)
 
         cursor.close()
 
@@ -66,6 +66,6 @@ def get_all():
     finally:
         if (sqliteConnection):
             sqliteConnection.close()
-            #print("The SQLite connection is closed")
+            print("The SQLite connection is closed")
 
 get_all()
