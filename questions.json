@@ -1,3 +1,193 @@
+pr = QuestionFilter('PREPOSITION', my_doc).write_linguistic_features()
+pr = pr.include_options(pr, '0')
+
+#pr_op = AddOptions("PREPOSITION", pr)
+#pr.insert(0, pr_op.add_options())
+
+adv = QuestionFilter('ADVERB', my_doc).write_linguistic_features()
+adv_op = AddOptions("ADVERB", adv)
+adv.insert(0, adv_op.add_options_vocab(nlp,
+"r"))
+
+adj = QuestionFilter('ADJECTIVE', my_doc).write_linguistic_features()
+adj_op = AddOptions("ADJECTIVE", adj)
+adj.insert(0, adj_op.add_options_vocab(nlp,
+"a"))
+
+vb = QuestionFilter('VERB', my_doc).write_linguistic_features()
+vb_op = AddOptions("VERB", vb)
+vb.insert(0, vb_op.add_options_vocab(nlp,
+"v"))
+
+aux = QuestionFilter('AUX', my_doc).write_linguistic_features()
+aux_op = AddOptions("AUX", aux)
+aux.insert(0, aux_op.add_options())
+
+nn = QuestionFilter('NOUN', my_doc).write_linguistic_features()
+nn_op = AddOptions("NOUN", nn)
+nn.insert(0, nn_op.add_options_vocab(nlp,
+"n"))
+
+dt = QuestionFilter('DETERMINER', my_doc).write_linguistic_features()
+wdt = QuestionFilter('WH-DETERMINER', my_doc).write_linguistic_features()
+pdt = QuestionFilter('PRE-DETERMINER', my_doc).write_linguistic_features()
+
+cnj = QuestionFilter('CONJUCTION', my_doc).write_linguistic_features()
+aptc = QuestionFilter('ADVERB-PARTICLE', my_doc).write_linguistic_features()
+
+cadj = QuestionFilter('COMPARATIVE-ADJECTIVE', my_doc).write_linguistic_features()
+sadj = QuestionFilter('SUPERLATIVE-ADJECTIVE', my_doc).write_linguistic_features()
+
+cadv = QuestionFilter('COMPARATIVE-ADVERB', my_doc).write_linguistic_features()
+sadv = QuestionFilter('SUPERLATIVE-ADVERB', my_doc).write_linguistic_features()
+
+thris = QuestionFilter('THERE-IS', my_doc).write_linguistic_features()
+mdl = QuestionFilter('MODAL', my_doc).write_linguistic_features()
+
+print(pr)
+print(adv)
+print(adj)
+print(vb)
+print(aux)
+
+print(nn)
+
+print(dt)
+print(wdt)
+print(pdt)
+
+print(cnj)
+
+print(aptc)
+print(cadj)
+print(sadj)
+print(cadv)
+print(sadv)
+print(thris)
+print(mdl)
+
+
+{'PREPOSITION': [
+        [
+            {'base': 'for', 'option1': 'toward', 'option2': 'by', 'option3': 'before'
+            },
+            {'base': 'like', 'option1': 'since', 'option2': 'round', 'option3': 'of'
+            },
+            {'base': 'at', 'option1': 'onto', 'option2': 'after', 'option3': 'around'
+            }
+        ],
+        {'PREPOSITION': 'for'
+        },
+        {'PREPOSITION': 'like'
+        },
+        {'PREPOSITION': 'at'
+        }
+    ], 'AUX': [
+        [
+            {'base': 'should', 'option1': 'has', 'option2': 'doing', 'option3': 'might'
+            },
+            {'base': 'have', 'option1': 'being', 'option2': 'were', 'option3': 'doing'
+            }
+        ],
+        {'AUX': 'should'
+        },
+        {'AUX': 'have'
+        }
+    ], 'DETERMINER': [
+        [
+            {'base': 'a', 'option1': 'where', 'option2': 'both', 'option3': 'what'
+            }
+        ],
+        {'DETERMINER': 'a'
+        }
+    ]
+}
+
+
+
+
+
+{'PREPOSITION': [
+        [
+            {'base': 'for', 'option1': 'as', 'option2': 'up', 'option3': 'as'
+            },
+            {'base': 'like', 'option1': 'until', 'option2': 'opposite', 'option3': 'beneath'
+            },
+            {'base': 'at', 'option1': 'following', 'option2': 'regarding', 'option3': 'onto'
+            }
+        ],
+        {'PREPOSITION': 'for'
+        },
+        {'PREPOSITION': 'like'
+        },
+        {'PREPOSITION': 'at'
+        }
+    ], 'AUX': [
+        [
+            {'base': 'should', 'option1': 'were', 'option2': 'would', 'option3': 'have'
+            },
+            {'base': 'have', 'option1': 'does', 'option2': 'doing', 'option3': 'would'
+            }
+        ],
+        {'AUX': 'should'
+        },
+        {'AUX': 'have'
+        }
+    ]
+}
+
+{'PREPOSITION': [
+        [
+            {'base': 'for', 'option1': 'despite', 'option2': 'until', 'option3': 'beneath'
+            },
+            {'base': 'like', 'option1': 'upon', 'option2': 'near', 'option3': 'as'
+            },
+            {'base': 'at', 'option1': 'between', 'option2': 'in', 'option3': 'around'
+            }
+        ],
+        [
+            {'base': 'for', 'option1': 'despite', 'option2': 'until', 'option3': 'beneath'
+            },
+            {'base': 'like', 'option1': 'upon', 'option2': 'near', 'option3': 'as'
+            },
+            {'base': 'at', 'option1': 'between', 'option2': 'in', 'option3': 'around'
+            }
+        ],
+        [
+            {'base': 'for', 'option1': 'despite', 'option2': 'until', 'option3': 'beneath'
+            },
+            {'base': 'like', 'option1': 'upon', 'option2': 'near', 'option3': 'as'
+            },
+            {'base': 'at', 'option1': 'between', 'option2': 'in', 'option3': 'around'
+            }
+        ],
+        {'PREPOSITION': 'for'
+        },
+        {'PREPOSITION': 'like'
+        },
+        {'PREPOSITION': 'at'
+        }
+    ], 'AUX': [
+        [
+            {'base': 'should', 'option1': 'have', 'option2': 'are', 'option3': 'could'
+            },
+            {'base': 'have', 'option1': 'are', 'option2': 'do', 'option3': 'be'
+            }
+        ],
+        [
+            {'base': 'should', 'option1': 'have', 'option2': 'are', 'option3': 'could'
+            },
+            {'base': 'have', 'option1': 'are', 'option2': 'do', 'option3': 'be'
+            }
+        ],
+        {'AUX': 'should'
+        },
+        {'AUX': 'have'
+        }
+    ]
+}
+
+
 [
     {
         "sentence": "China denies plan to hit Alibaba with $1B fine",

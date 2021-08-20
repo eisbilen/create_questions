@@ -23,6 +23,8 @@ BASE_DICT = {
     "WH-DETERMINER": ["what", "which", "such", "where", "why", "when"],
     "DETERMINER": ["the", "an", "what", "which", "such", "where", "why", "when", "rather", "quite", "all", "both", "twice", "half"],
     "ADVERB": ["the", "an", "what", "which", "such", "where", "why", "when", "rather", "quite", "all", "both", "twice", "half"],
+    "AUX": ["am", "is", "are", "was", "were", "be", "being", "can", "could", "do", "did", "does", "doing", "have", "had", "has", "having", "may", "might", "will", "would"],
+    
 }
 
 class AddOptions:
@@ -37,30 +39,29 @@ class AddOptions:
     def add_options(self):
         question_temp = BASE_DICT[self.tag]
         question_options = []
+        print(self.question)
+
+        question_option = {}
+   
+        #If there is any Capital letter in options, dont consider it
+        if any(x.isupper() for x in self.question[self.tag]):
+            return
         
-        for item in self.question:
-            question_option = {}
-            
-            #If there is any Capital letter in options, dont consider it
-            print(item)
-            if any(x.isupper() for x in item[self.tag]):
-                break
-            
-            n = [x for x in question_temp if x != item[self.tag]]
+        n = [x for x in question_temp if x != self.question[self.tag]]
        
-            question_option["base"] = item[self.tag]           
-            question_option["option1"] = random.choice(n)
-            n.remove(question_option["option1"])          
-            question_option["option2"] = random.choice(n)
-            n.remove(question_option["option2"])         
-            question_option["option3"] = random.choice(n)
+        question_option["base"] = self.question[self.tag]           
+        question_option["option1"] = random.choice(n)
+        n.remove(question_option["option1"])          
+        question_option["option2"] = random.choice(n)
+        n.remove(question_option["option2"])         
+        question_option["option3"] = random.choice(n)
+        print('qp', question_option)
+        question_options.append(question_option)
             
-            question_options.append(question_option)
-            
-        return question_options
+        return question_option
     
     def add_options_vocab(self, nlp, vaa):
-        
+
         question_options = []
         
         vaa_options = []
@@ -80,36 +81,52 @@ class AddOptions:
             vaa_options[0]="n"
             vaa_options[1]="r"
             vaa_options[2]="a"
+
+        if vaa == "n":
+            vaa_options[0]="v"
+            vaa_options[1]="r"
+            vaa_options[2]="a"
+
         
         for item in self.question:
-            print(item)
             question_option = {}
-            
+  
             if any(x.isupper() for x in item[self.tag]):
                 break
             
-            w_id = nlp.vocab.strings[item[self.tag]]
-            w_vector = nlp.vocab.vectors[w_id]
-            most_similar = nlp.vocab.vectors.most_similar(w_vector.reshape(1,300), n=60)
+            try:
+                w_id = nlp.vocab.strings[item[self.tag].lower()]
+                w_vector = nlp.vocab.vectors[w_id]
+                most_similar = nlp.vocab.vectors.most_similar(w_vector.reshape(1,300), n=60)
+                
+                question_option["base"] = item[self.tag]        
+                question_option["option1"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(10,20))]].lower()
+                question_option["option2"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(21,30))]].lower()
+                question_option["option3"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(31,40))]].lower()
 
-            question_option["base"] = item[self.tag]        
-            question_option["option1"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(10,20))]].lower()
-            question_option["option2"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(21,30))]].lower()
-            question_option["option3"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(31,40))]].lower()
+            except KeyError as error:
+                print("Keyerror", error)
+                break          
+
             
-            for word in get_word_forms(lemmatize(item[self.tag]))[vaa_options[0]]:
-                if word != item[self.tag]:
-                    question_option["option1"] =  word 
+            try:
+                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[0]]:
+                    if word != item[self.tag]:
+                        question_option["option1"] =  word 
             
-            for word in get_word_forms(lemmatize(item[self.tag]))[vaa_options[1]]:
-                if word != item[self.tag]:
-                    question_option["option2"] =  word      
+                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[1]]:
+                    if word != item[self.tag]:
+                        question_option["option2"] =  word      
             
-            for word in get_word_forms(lemmatize(item[self.tag]))[vaa_options[2]]:
-                if word != item[self.tag]:
-                    question_option["option3"] =  word
-                     
-            question_options.append(question_option)
-            print(question_options)
+                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[2]]:
+                    if word != item[self.tag]:
+                        question_option["option3"] =  word
+            
+            except ValueError as error:
+                print("ValueError", error)
+
+            finally:
+                question_options.append(question_option)
+
         
         return question_options

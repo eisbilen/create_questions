@@ -6,6 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
+
+# Install pip requirements
+COPY requirements.txt .
+RUN python -m pip install -r requirements.txt
+RUN mkdir -p /data
+
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update && apt-get install -y git
@@ -13,7 +19,8 @@ RUN apt-get install -y build-essential python-dev git
 
 RUN python -m pip install -U pip setuptools wheel # install/update build tools
 RUN pip install -U spacy
-RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_md
+RUN pip install -U word_forms
 
 RUN mkdir -p /data
 

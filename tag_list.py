@@ -1,0 +1,1 @@
+taglist = ['PREPOSITION', 'AUX', 'DETERMINER']
