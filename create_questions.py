@@ -42,12 +42,33 @@ class QuestionFilter:
                 string_id = nlp.vocab.strings[match_id]
                 span = self.my_doc[start:end]  # The matched span
                 lf_dict[string_id] = span.text
- 
+
+                option2 = 0
+
+                if self.taglist[i]=="VERB":
+                    option2 = 1
+                    vaa = 'v'
+
+                if self.taglist[i]=="ADVERB":
+                    option2 = 1
+                    vaa = 'r'
+
+                if self.taglist[i]=="ADJECTIVE":
+                    option2 = 1
+                    vaa = 'a'
+
+                if self.taglist[i]=="NOUN":
+                    option2 = 1
+                    vaa = 'n'
+
                 if lf_dict:
                     question_list.append(lf_dict)
                     temp = AddOptions(self.taglist[i], lf_dict)
-                    option_list.append(temp.add_options())
-                    print('option list')
+
+                    if option2 == 0:
+                        option_list.append(temp.add_options()) 
+                    else:
+                        option_list.append(temp.add_options_vocab(nlp, vaa))         
                 
             question_list.insert(0, option_list)
             comp_lf_dict[self.taglist[i]] = question_list
@@ -76,10 +97,13 @@ def get_all():
         records = cursor.fetchall()
 
         for row in records:
+            item = dict()
             sentence = dict(row)['sentence']
             my_doc = nlp(sentence)
             print(my_doc)
-            print(QuestionFilter(taglist, my_doc)())
+            item['sentence'] = sentence
+            item.update(QuestionFilter(taglist, my_doc)())  
+            print(item)
         cursor.close()
 
     except sqlite3.Error as error:

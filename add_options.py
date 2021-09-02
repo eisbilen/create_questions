@@ -91,15 +91,15 @@ class AddOptions:
         for item in self.question:
             question_option = {}
   
-            if any(x.isupper() for x in item[self.tag]):
+            if any(x.isupper() for x in self.question[self.tag]):
                 break
             
             try:
-                w_id = nlp.vocab.strings[item[self.tag].lower()]
+                w_id = nlp.vocab.strings[self.question[self.tag].lower()]
                 w_vector = nlp.vocab.vectors[w_id]
                 most_similar = nlp.vocab.vectors.most_similar(w_vector.reshape(1,300), n=60)
                 
-                question_option["base"] = item[self.tag]        
+                question_option["base"] = self.question[self.tag]     
                 question_option["option1"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(10,20))]].lower()
                 question_option["option2"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(21,30))]].lower()
                 question_option["option3"] = nlp.vocab.strings[most_similar[0][0][random.choice(range(31,40))]].lower()
@@ -110,16 +110,16 @@ class AddOptions:
 
             
             try:
-                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[0]]:
-                    if word != item[self.tag]:
+                for word in get_word_forms(lemmatize(self.question[self.tag].lower()))[vaa_options[0]]:
+                    if word != self.question[self.tag]:
                         question_option["option1"] =  word 
             
-                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[1]]:
-                    if word != item[self.tag]:
+                for word in get_word_forms(lemmatize(self.question[self.tag].lower()))[vaa_options[1]]:
+                    if word != self.question[self.tag]:
                         question_option["option2"] =  word      
             
-                for word in get_word_forms(lemmatize(item[self.tag].lower()))[vaa_options[2]]:
-                    if word != item[self.tag]:
+                for word in get_word_forms(lemmatize(self.question[self.tag].lower()))[vaa_options[2]]:
+                    if word != self.question[self.tag]:
                         question_option["option3"] =  word
             
             except ValueError as error:
