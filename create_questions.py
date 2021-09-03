@@ -9,11 +9,17 @@ import tag_list as tag_list
 import sqlite3
 
 import json
-
-
+from datetime import datetime
+import time
 
 nlp = spacy.load('en_core_web_md')
 taglist = tag_list.taglist
+
+def filename_generator():
+    time.sleep(1)
+    file_name = '_' + \
+        str(datetime.now().strftime("%Y-%m-%d_%Hh%Mm%Ss")) + '.jpg'
+    return file_name
 
 class QuestionFilter:
     def __init__(self, taglist, my_doc) -> None:
@@ -109,6 +115,7 @@ def get_all():
                 my_doc = nlp(sentence)
                 print(my_doc)
                 item['sentence'] = sentence
+                item['image_file_name'] = filename_generator()
                 item.update(QuestionFilter(taglist, my_doc)())  
                 print(item)
                 data.append(item)
