@@ -23,8 +23,7 @@ BASE_DICT = {
     "WH-DETERMINER": ["what", "which", "such", "where", "why", "when"],
     "DETERMINER": ["the", "an", "what", "which", "such", "where", "why", "when", "rather", "quite", "all", "both", "twice", "half"],
     "ADVERB": ["the", "an", "what", "which", "such", "where", "why", "when", "rather", "quite", "all", "both", "twice", "half"],
-    "AUX": ["am", "is", "are", "was", "were", "be", "being", "can", "could", "do", "did", "does", "doing", "have", "had", "has", "having", "may", "might", "will", "would"],
-    
+    "AUX": ["am", "is", "are", "was", "were", "be", "being", "can", "could", "do", "did", "does", "doing", "have", "had", "has", "having", "may", "might", "will", "would"]   
 }
 
 class AddOptions:
@@ -87,7 +86,6 @@ class AddOptions:
             vaa_options[1]="r"
             vaa_options[2]="a"
 
-        
         for item in self.question:
             question_option = {}
   
@@ -107,7 +105,6 @@ class AddOptions:
             except KeyError as error:
                 print("Keyerror", error)
                 break          
-
             
             try:
                 for word in get_word_forms(lemmatize(self.question[self.tag].lower()))[vaa_options[0]]:

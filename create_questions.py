@@ -8,6 +8,10 @@ import tag_list as tag_list
 
 import sqlite3
 
+import json
+
+
+
 nlp = spacy.load('en_core_web_md')
 taglist = tag_list.taglist
 
@@ -30,7 +34,6 @@ class QuestionFilter:
         lf_dict = {}
         comp_lf_dict = {}
 
-        
         for i in range(len(taglist)):
             matches = self.__matcher[i](self.my_doc)
             question_list = []
@@ -96,15 +99,19 @@ def get_all():
         cursor.execute(sql_select_query)
         records = cursor.fetchall()
 
-        for row in records:
-            item = dict()
-            sentence = dict(row)['sentence']
-            my_doc = nlp(sentence)
-            print(my_doc)
-            item['sentence'] = sentence
-            item.update(QuestionFilter(taglist, my_doc)())  
-            print(item)
-        cursor.close()
+        with open('/data/data.json', 'w', encoding='utf-8') as f:
+    
+
+            for row in records:
+                item = dict()
+                sentence = dict(row)['sentence']
+                my_doc = nlp(sentence)
+                print(my_doc)
+                item['sentence'] = sentence
+                item.update(QuestionFilter(taglist, my_doc)())  
+                print(item)
+                json.dump(item, f, ensure_ascii=False, indent=4)
+            cursor.close()
 
     except sqlite3.Error as error:
         print("Failed to read data from sqlite table", error)
