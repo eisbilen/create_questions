@@ -99,6 +99,7 @@ def get_all():
         cursor.execute(sql_select_query)
         records = cursor.fetchall()
 
+        data = list()
         with open('/data/data.json', 'w', encoding='utf-8') as f:
     
 
@@ -110,9 +111,9 @@ def get_all():
                 item['sentence'] = sentence
                 item.update(QuestionFilter(taglist, my_doc)())  
                 print(item)
-                json.dump(item, f, ensure_ascii=False, indent=4)
+                data.append(item)
             cursor.close()
-
+            json.dump(data, f, ensure_ascii=False, indent=4)
     except sqlite3.Error as error:
         print("Failed to read data from sqlite table", error)
 
