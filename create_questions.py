@@ -95,7 +95,7 @@ class QuestionFilter:
 
 def get_all():
     try:
-        sqliteConnection = sqlite3.connect('/data/lingomooAPP.db')
+        sqliteConnection = sqlite3.connect('/data/database/lingomooAPP.db')
         sqliteConnection.row_factory = sqlite3.Row  
         cursor = sqliteConnection.cursor()
 
@@ -107,14 +107,17 @@ def get_all():
 
         data = list()
         with open('/data/data.json', 'w', encoding='utf-8') as f:
-    
-
             for row in records:
                 item = dict()
                 sentence = dict(row)['sentence']
+                article_image_src = dict(row)['article_image_src']
+                article_image_basename = dict(row)['article_image_basename']
+
                 my_doc = nlp(sentence)
                 print(my_doc)
                 item['sentence'] = sentence
+                item['article_image_src'] = article_image_src
+                item['article_image_basename'] = article_image_basename
                 item['image_file_name'] = filename_generator()
                 item.update(QuestionFilter(taglist, my_doc)())  
                 print(item)
